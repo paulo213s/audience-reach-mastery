@@ -2,8 +2,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Bell, Search, User, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
     <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -39,8 +42,11 @@ const Header = () => {
             <Button variant="ghost" size="icon">
               <User className="w-5 h-5" />
             </Button>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              Upgrade Pro
+            <Button 
+              onClick={() => navigate('/auth')}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            >
+              Entrar / Cadastrar
             </Button>
           </div>
         </div>
