@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,9 +7,54 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TrendingUp, Phone, Mail, Users, Search, BarChart, Target } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const { signIn, signUp, user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect authenticated users to home page
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    const { error } = await signIn(email, password);
+    
+    if (!error) {
+      navigate('/');
+    }
+    
+    setLoading(false);
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      alert('As senhas não coincidem');
+      return;
+    }
+    
+    setLoading(true);
+    
+    const { error } = await signUp(email, password, fullName);
+    
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
@@ -90,59 +135,113 @@ const Auth = () => {
                   </TabsList>
 
                   <TabsContent value="login" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="username">Username</Label>
-                      <Input id="username" type="text" className="h-12" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input id="password" type="password" className="h-12" />
-                      <div className="text-right">
-                        <a href="#" className="text-sm text-blue-600 hover:underline">
-                          Forgot password?
-                        </a>
+                    <form onSubmit={handleLogin} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="remember" />
-                      <label htmlFor="remember" className="text-sm text-gray-600">
-                        Remember me
-                      </label>
-                    </div>
-                    <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium">
-                      Sign in
-                    </Button>
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Senha</Label>
+                        <Input 
+                          id="password" 
+                          type="password" 
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
+                        <div className="text-right">
+                          <a href="#" className="text-sm text-blue-600 hover:underline">
+                            Esqueceu a senha?
+                          </a>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="remember" />
+                        <label htmlFor="remember" className="text-sm text-gray-600">
+                          Lembrar de mim
+                        </label>
+                      </div>
+                      <Button 
+                        type="submit" 
+                        className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                        disabled={loading}
+                      >
+                        {loading ? 'Entrando...' : 'Entrar'}
+                      </Button>
+                    </form>
                     <div className="text-center text-sm text-gray-600">
-                      Do not have an account?{' '}
+                      Não tem uma conta?{' '}
                       <button 
                         onClick={() => setIsLogin(false)}
                         className="text-blue-600 hover:underline font-medium"
                       >
-                        Sign up
+                        Criar conta
                       </button>
                     </div>
                   </TabsContent>
 
                   <TabsContent value="register" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fullname">Nome Completo</Label>
-                      <Input id="fullname" type="text" className="h-12" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" className="h-12" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="newpassword">Senha</Label>
-                      <Input id="newpassword" type="password" className="h-12" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="confirmpassword">Confirmar Senha</Label>
-                      <Input id="confirmpassword" type="password" className="h-12" />
-                    </div>
-                    <Button className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-medium">
-                      CRIAR CADASTRO AGORA
-                    </Button>
+                    <form onSubmit={handleSignUp} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="fullname">Nome Completo</Label>
+                        <Input 
+                          id="fullname" 
+                          type="text" 
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email-register">Email</Label>
+                        <Input 
+                          id="email-register" 
+                          type="email" 
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="newpassword">Senha</Label>
+                        <Input 
+                          id="newpassword" 
+                          type="password" 
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmpassword">Confirmar Senha</Label>
+                        <Input 
+                          id="confirmpassword" 
+                          type="password" 
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="h-12" 
+                          required
+                        />
+                      </div>
+                      <Button 
+                        type="submit" 
+                        className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-medium"
+                        disabled={loading}
+                      >
+                        {loading ? 'Criando conta...' : 'CRIAR CADASTRO AGORA'}
+                      </Button>
+                    </form>
                     <div className="text-center text-sm text-gray-600">
                       Já tem uma conta?{' '}
                       <button 
