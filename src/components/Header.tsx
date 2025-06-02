@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Bell, Search, User, TrendingUp, LogOut } from 'lucide-react';
+import { Bell, Search, User, TrendingUp, LogOut, LayoutDashboard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -47,6 +47,14 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             {user && (
               <>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => navigate('/dashboard')}
+                  className="flex items-center space-x-2"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </Button>
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="w-5 h-5" />
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
