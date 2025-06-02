@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         // Create profile if user signs up
-        if (event === 'SIGNED_UP' && session?.user) {
+        if (session?.user && !session.user.email_confirmed_at) {
           setTimeout(async () => {
             const { error } = await supabase
               .from('profiles')
