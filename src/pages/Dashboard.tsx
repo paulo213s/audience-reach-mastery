@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const { profile, loading } = useProfile();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('promocional');
+  const [selectedService, setSelectedService] = useState('');
   const [activeSection, setActiveSection] = useState('new-order');
   const [showBalanceDialog, setShowBalanceDialog] = useState(false);
   
@@ -30,12 +32,90 @@ const Dashboard = () => {
     { icon: Package, label: 'Mass order', id: 'mass-order' }
   ];
 
+  const categories = [
+    { value: 'promocional', label: '🔥 MEGA CATEGORIA PROMOCIONAL 🔥' },
+    { value: 'instagram', label: '📷 Instagram' },
+    { value: 'youtube', label: '🎥 YouTube' },
+    { value: 'facebook', label: '📘 Facebook' },
+    { value: 'tiktok', label: '🎵 TikTok' },
+    { value: 'twitter', label: '🐦 Twitter' },
+    { value: 'telegram', label: '📱 Telegram' },
+    { value: 'twitch', label: '🎮 Twitch' },
+    { value: 'kwai', label: '🌟 Kwai' }
+  ];
+
+  const services = {
+    instagram: [
+      { id: 'insta-1', name: '📊 INSTA - Métricas em publicação', price: '0.25' },
+      { id: 'insta-2', name: '💭 INSTA - Comentários Portugal', price: '0.40' },
+      { id: 'insta-3', name: '🌍 INSTA - Comentários Mundiais', price: '0.35' },
+      { id: 'insta-4', name: '💬 INSTA - Curtidas em Comentário Específico', price: '0.30' },
+      { id: 'insta-5', name: '✅ INSTA - Comentários Verificados', price: '0.50' },
+      { id: 'insta-6', name: '🌐 INSTA - Membros em Canal', price: '0.45' }
+    ],
+    youtube: [
+      { id: 'ytb-1', name: '📝 YTB - Inscritos', price: '0.80' },
+      { id: 'ytb-2', name: '👁️ YTB - Visualizações (REAIS)', price: '0.30' },
+      { id: 'ytb-3', name: '👍 YTB - Likes', price: '0.25' },
+      { id: 'ytb-4', name: '💬 YTB - Comentários', price: '0.50' },
+      { id: 'ytb-5', name: '🔴 YTB - Comentários em Live', price: '0.60' },
+      { id: 'ytb-6', name: '✅ YTB - Comentários Verificados', price: '0.75' }
+    ],
+    facebook: [
+      { id: 'face-1', name: '👥 FACE - Membros para grupos', price: '0.35' },
+      { id: 'face-2', name: '✅ FACE - Confirmação em Evento', price: '0.40' },
+      { id: 'face-3', name: '💰 FACE - Monetização Visualização', price: '0.30' },
+      { id: 'face-4', name: '📊 FACE - Avaliação em Página', price: '0.45' },
+      { id: 'face-5', name: '📺 FACE - Telespectadores em Live', price: '0.50' },
+      { id: 'face-6', name: '🤝 FACE - Solicitação de Amizade', price: '0.35' },
+      { id: 'face-7', name: '👥 FACE - Seguidores Perfil Pessoal', price: '0.40' },
+      { id: 'face-8', name: '📄 FACE - Seguidores Para Página', price: '0.35' },
+      { id: 'face-9', name: '👍 FACE - Gostos em Página', price: '0.30' },
+      { id: 'face-10', name: '👍 FACE - Curtidas em Publicação', price: '0.25' },
+      { id: 'face-11', name: '🎥 FACE - Visualização em Vídeo', price: '0.20' },
+      { id: 'face-12', name: '👍 FACE - Reação em publicações', price: '0.30' },
+      { id: 'face-13', name: '💬 FACE - Comentários', price: '0.45' },
+      { id: 'face-14', name: '📖 FACE - Visualização em Story', price: '0.15' }
+    ],
+    tiktok: [
+      { id: 'tiktok-1', name: '👥 TIKTOK - Seguidores Portugal', price: '0.60' },
+      { id: 'tiktok-2', name: '🌍 TIKTOK - Seguidores por Gênero', price: '0.55' },
+      { id: 'tiktok-3', name: '🌎 TIKTOK - Seguidores Mundiais', price: '0.50' },
+      { id: 'tiktok-4', name: '👍 TIKTOK - Gostos', price: '0.25' },
+      { id: 'tiktok-5', name: '👁️ TIKTOK - Visualização em Vídeo', price: '0.20' },
+      { id: 'tiktok-6', name: '🛠️ TIKTOK - Serviços', price: '0.40' },
+      { id: 'tiktok-7', name: '💬 TIKTOK - Comentários', price: '0.45' },
+      { id: 'tiktok-8', name: '✅ TIKTOK - Comentário Verificado', price: '0.70' }
+    ],
+    twitch: [
+      { id: 'twitch-1', name: '👥 TWITCH - Seguidores', price: '0.50' },
+      { id: 'twitch-2', name: '🛠️ TWITCH - Serviços', price: '0.45' },
+      { id: 'twitch-3', name: '📺 TWITCH - Telespectadores em Live', price: '0.60' }
+    ],
+    telegram: [
+      { id: 'telegram-1', name: '👥 TELEGRAM - Seguidores', price: '0.35' },
+      { id: 'telegram-2', name: '👍 TELEGRAM - Reações', price: '0.25' }
+    ],
+    kwai: [
+      { id: 'kwai-1', name: '👥 KAWAI - Seguidores', price: '0.45' },
+      { id: 'kwai-2', name: '👍 KAWAI - Gostos', price: '0.30' },
+      { id: 'kwai-3', name: '👁️ KAWAI - Visualizações em Vídeo', price: '0.20' }
+    ],
+    promocional: [
+      { id: 'promo-1', name: '👑 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️', price: '0.30' }
+    ]
+  };
+
   const handleSidebarClick = (id: string) => {
     if (id === 'add-balance') {
       setShowBalanceDialog(true);
     } else {
       setActiveSection(id);
     }
+  };
+
+  const getCurrentServices = () => {
+    return services[selectedCategory as keyof typeof services] || [];
   };
 
   if (loading) {
@@ -161,10 +241,11 @@ const Dashboard = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="promocional">🔥 MEGA CATEGORIA PROMOCIONAL 🔥</SelectItem>
-                      <SelectItem value="instagram">Instagram</SelectItem>
-                      <SelectItem value="youtube">YouTube</SelectItem>
-                      <SelectItem value="tiktok">TikTok</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.value} value={category.value}>
+                          {category.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -172,61 +253,67 @@ const Dashboard = () => {
                 {/* Service */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Service</label>
-                  <Select>
+                  <Select value={selectedService} onValueChange={setSelectedService}>
                     <SelectTrigger>
-                      <SelectValue placeholder="257 - 👑 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️ - 0.30 € per 1000" />
+                      <SelectValue placeholder="Selecione um serviço" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="service1">257 - 👑 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️ - 0.30 € per 1000</SelectItem>
+                      {getCurrentServices().map((service) => (
+                        <SelectItem key={service.id} value={service.id}>
+                          {service.name} - {service.price} € per 1000
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Description */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                  <div className="bg-blue-50 p-4 rounded-lg space-y-2">
-                    <p className="text-sm">
-                      <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
-                      <span className="text-yellow-500">👑</span> — FUNCIONA EM APENAS REELS E FEED.
-                    </p>
-                    
-                    <div className="space-y-1">
-                      <p className="text-sm flex items-center">
-                        <span className="text-green-500 mr-2">✅</span>
-                        <span className="text-yellow-500">⚡</span> — Inicia em 15 - 60 Minutos. Ser não até 12 horas.
+                {/* Description - Show only for promotional service */}
+                {selectedService === 'promo-1' && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <div className="bg-blue-50 p-4 rounded-lg space-y-2">
+                      <p className="text-sm">
+                        <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
+                        <span className="text-yellow-500">👑</span> — FUNCIONA EM APENAS REELS E FEED.
                       </p>
-                      <p className="text-sm flex items-center">
-                        <span className="text-green-500 mr-2">✅</span>
-                        <span className="text-yellow-500">⚡</span> — Após iniciado o Sistema entrega: 10.000 a 100.000 Visualizações por Dia.
+                      
+                      <div className="space-y-1">
+                        <p className="text-sm flex items-center">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span className="text-yellow-500">⚡</span> — Inicia em 15 - 60 Minutos. Ser não até 12 horas.
+                        </p>
+                        <p className="text-sm flex items-center">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span className="text-yellow-500">⚡</span> — Após iniciado o Sistema entrega: 10.000 a 100.000 Visualizações por Dia.
+                        </p>
+                        <p className="text-sm flex items-center">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span className="text-yellow-500">⚡</span> — HQ: Alta Qualidade
+                        </p>
+                      </div>
+
+                      <p className="text-sm">
+                        <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
+                        <span className="text-red-500">🚫</span> SR : ESTE SERVIÇO NÃO CONTA COM REPOSIÇÃO. (NÃO TEM QUEDA)
                       </p>
-                      <p className="text-sm flex items-center">
-                        <span className="text-green-500 mr-2">✅</span>
-                        <span className="text-yellow-500">⚡</span> — HQ: Alta Qualidade
+
+                      <div className="space-y-1">
+                        <p className="text-sm flex items-center">
+                          <span className="text-red-500 mr-2">❌</span> — O perfil precisar estar aberto (em modo público).
+                        </p>
+                        <p className="text-sm flex items-center">
+                          <span className="text-red-500 mr-2">❌</span> — Só faça um pedido para o mesmo LINK após o pedido anterior estiver sido completado.
+                        </p>
+                      </div>
+
+                      <p className="text-sm">
+                        <span className="text-yellow-500">❓</span> — O campo Link deve ser preenchido com o LINK Do Vídeo .
                       </p>
+                      <p className="text-sm text-red-500">❌https://www.instagram.com/eu.fabricio_</p>
+                      <p className="text-sm text-green-500">✅https://www.instagram.com/reel/CfcOSfH9JQnT/</p>
                     </div>
-
-                    <p className="text-sm">
-                      <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
-                      <span className="text-red-500">🚫</span> SR : ESTE SERVIÇO NÃO CONTA COM REPOSIÇÃO. (NÃO TEM QUEDA)
-                    </p>
-
-                    <div className="space-y-1">
-                      <p className="text-sm flex items-center">
-                        <span className="text-red-500 mr-2">❌</span> — O perfil precisar estar aberto (em modo público).
-                      </p>
-                      <p className="text-sm flex items-center">
-                        <span className="text-red-500 mr-2">❌</span> — Só faça um pedido para o mesmo LINK após o pedido anterior estiver sido completado.
-                      </p>
-                    </div>
-
-                    <p className="text-sm">
-                      <span className="text-yellow-500">❓</span> — O campo Link deve ser preenchido com o LINK Do Vídeo .
-                    </p>
-                    <p className="text-sm text-red-500">❌https://www.instagram.com/eu.fabricio_</p>
-                    <p className="text-sm text-green-500">✅https://www.instagram.com/reel/CfcOSfH9JQnT/</p>
                   </div>
-                </div>
+                )}
 
                 {/* Link */}
                 <div className="mb-4">
