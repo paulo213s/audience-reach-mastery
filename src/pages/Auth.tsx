@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendingUp, Phone, Mail, Users, Search, BarChart, Target } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +17,16 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setUserType] = useState<'admin' | 'client'>('client');
   const [loading, setLoading] = useState(false);
   
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect authenticated users to home page
+  // Redirect authenticated users to dashboard
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
@@ -35,7 +37,7 @@ const Auth = () => {
     const { error } = await signIn(email, password);
     
     if (!error) {
-      navigate('/');
+      navigate('/dashboard');
     }
     
     setLoading(false);
@@ -51,7 +53,7 @@ const Auth = () => {
     
     setLoading(true);
     
-    const { error } = await signUp(email, password, fullName);
+    const { error } = await signUp(email, password, fullName, userType);
     
     setLoading(false);
   };
@@ -213,6 +215,18 @@ const Auth = () => {
                         />
                       </div>
                       <div className="space-y-2">
+                        <Label htmlFor="usertype">Tipo de Conta</Label>
+                        <Select value={userType} onValueChange={setUserType}>
+                          <SelectTrigger className="h-12">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="client">Cliente</SelectItem>
+                            <SelectItem value="admin">Administrador</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
                         <Label htmlFor="newpassword">Senha</Label>
                         <Input 
                           id="newpassword" 
@@ -274,7 +288,6 @@ const Auth = () => {
           </Button>
         </div>
 
-        {/* Features Grid */}
         <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="text-center p-6 border-0 bg-white/80 backdrop-blur-sm shadow-lg">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">

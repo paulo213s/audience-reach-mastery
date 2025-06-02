@@ -9,27 +9,116 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      balance_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          order_id: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_id?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order_id?: string | null
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "balance_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          id: string
+          link: string | null
+          order_type: string
+          quantity: number | null
+          service_id: string | null
+          service_name: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          link?: string | null
+          order_type: string
+          quantity?: number | null
+          service_id?: string | null
+          service_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          link?: string | null
+          order_type?: string
+          quantity?: number | null
+          service_id?: string | null
+          service_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          balance: number | null
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string
           updated_at: string | null
+          user_type: string | null
         }
         Insert: {
+          balance?: number | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
+          user_type?: string | null
         }
         Update: {
+          balance?: number | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
+          user_type?: string | null
         }
         Relationships: []
       }
@@ -38,7 +127,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_balance: {
+        Args: {
+          p_user_id: string
+          p_amount: number
+          p_transaction_type: string
+          p_description?: string
+          p_order_id?: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

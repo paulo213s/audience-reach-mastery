@@ -8,7 +8,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName?: string, userType?: 'admin' | 'client') => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
 }
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -34,6 +34,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             title: "Login realizado com sucesso!",
             description: "Bem-vindo de volta!",
           });
+        }
+
+        // Create profile if user signs up
+        if (event === 'SIGNED_UP' && session?.user) {
+          setTimeout(async () => {
+            const { error } = await supabase
+              .from('profiles')
+              .upsert({
+                id: session.user.id,
+                email: session.user.email,
+                full_name: session.user.user_metadata?.full_name,
+                user_type: session.user.user_metadata?.user_type || 'client',
+                balance: 0
+              });
+            
+            if (error) {
+              console.error('Error creating profile:', error);
+            }
+          }, 0);
         }
       }
     );
@@ -48,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [toast]);
 
-  const signUp = async (email: string, password: string, fullName?: string) => {
+  const signUp = async (email: string, password: string, fullName?: string, userType: 'admin' | 'client' = 'client') => {
     const redirectUrl = `${window.location.origin}/`;
     
     const { error } = await supabase.auth.signUp({
@@ -57,7 +76,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          full_name: fullName
+          full_name: fullName,
+          user_type: userType
         }
       }
     });
