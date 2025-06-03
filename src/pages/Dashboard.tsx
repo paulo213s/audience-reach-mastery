@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Search, Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle } from 'lucide-react';
+import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import BalanceTopUp from '@/components/BalanceTopUp';
 import OrderHistory from '@/components/OrderHistory';
+import OrderForm from '@/components/OrderForm';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const { profile, loading } = useProfile();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('promocional');
-  const [selectedService, setSelectedService] = useState('');
   const [activeSection, setActiveSection] = useState('new-order');
   const [showBalanceDialog, setShowBalanceDialog] = useState(false);
   
@@ -121,10 +117,6 @@ const Dashboard = () => {
     }
   };
 
-  const getCurrentServices = () => {
-    return services[selectedCategory as keyof typeof services] || [];
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -224,121 +216,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Service Form */}
-            <Card className="mb-6">
-              <CardContent className="p-6">
-                {/* Search */}
-                <div className="mb-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <Input
-                      placeholder="Search"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </div>
-
-                {/* Category */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Service */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Service</label>
-                  <Select value={selectedService} onValueChange={setSelectedService}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um serviço" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getCurrentServices().map((service) => (
-                        <SelectItem key={service.id} value={service.id}>
-                          {service.name} - {service.price} € per 1000
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Description - Show only for promotional service */}
-                {selectedService === 'promo-1' && (
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <div className="bg-blue-50 p-4 rounded-lg space-y-2">
-                      <p className="text-sm">
-                        <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
-                        <span className="text-yellow-500">👑</span> — FUNCIONA EM APENAS REELS E FEED.
-                      </p>
-                      
-                      <div className="space-y-1">
-                        <p className="text-sm flex items-center">
-                          <span className="text-green-500 mr-2">✅</span>
-                          <span className="text-yellow-500">⚡</span> — Inicia em 15 - 60 Minutos. Ser não até 12 horas.
-                        </p>
-                        <p className="text-sm flex items-center">
-                          <span className="text-green-500 mr-2">✅</span>
-                          <span className="text-yellow-500">⚡</span> — Após iniciado o Sistema entrega: 10.000 a 100.000 Visualizações por Dia.
-                        </p>
-                        <p className="text-sm flex items-center">
-                          <span className="text-green-500 mr-2">✅</span>
-                          <span className="text-yellow-500">⚡</span> — HQ: Alta Qualidade
-                        </p>
-                      </div>
-
-                      <p className="text-sm">
-                        <span className="inline-block w-2 h-2 bg-blue-600 rounded mr-2"></span>
-                        <span className="text-red-500">🚫</span> SR : ESTE SERVIÇO NÃO CONTA COM REPOSIÇÃO. (NÃO TEM QUEDA)
-                      </p>
-
-                      <div className="space-y-1">
-                        <p className="text-sm flex items-center">
-                          <span className="text-red-500 mr-2">❌</span> — O perfil precisar estar aberto (em modo público).
-                        </p>
-                        <p className="text-sm flex items-center">
-                          <span className="text-red-500 mr-2">❌</span> — Só faça um pedido para o mesmo LINK após o pedido anterior estiver sido completado.
-                        </p>
-                      </div>
-
-                      <p className="text-sm">
-                        <span className="text-yellow-500">❓</span> — O campo Link deve ser preenchido com o LINK Do Vídeo .
-                      </p>
-                      <p className="text-sm text-red-500">❌https://www.instagram.com/eu.fabricio_</p>
-                      <p className="text-sm text-green-500">✅https://www.instagram.com/reel/CfcOSfH9JQnT/</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Link */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Link</label>
-                  <Input placeholder="Enter your link here" />
-                </div>
-
-                {/* Quantity */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                  <Input placeholder="Enter quantity" type="number" />
-                </div>
-
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  Fazer Pedido
-                </Button>
-              </CardContent>
-            </Card>
+            {/* Order Form */}
+            <OrderForm categories={categories} services={services} />
 
             {/* Promotional Image */}
             <Card>
