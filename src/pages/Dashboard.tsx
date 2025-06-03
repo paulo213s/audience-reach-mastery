@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,12 +45,20 @@ const Dashboard = () => {
 
   const services = {
     instagram: [
-      { id: 'insta-1', name: '📊 INSTA - Métricas em publicação', price: '0.25' },
-      { id: 'insta-2', name: '💭 INSTA - Comentários Portugal', price: '0.40' },
-      { id: 'insta-3', name: '🌍 INSTA - Comentários Mundiais', price: '0.35' },
-      { id: 'insta-4', name: '💬 INSTA - Curtidas em Comentário Específico', price: '0.30' },
-      { id: 'insta-5', name: '✅ INSTA - Comentários Verificados', price: '0.50' },
-      { id: 'insta-6', name: '🌐 INSTA - Membros em Canal', price: '0.45' }
+      { id: 'insta-1', name: '📊 INSTA - Mais Vendidos', price: '0.25' },
+      { id: 'insta-2', name: '🇵🇹 INSTA - Seguidores Portugal', price: '0.40' },
+      { id: 'insta-3', name: '🇵🇹 INSTA - Seguidores Mistos', price: '0.35' },
+      { id: 'insta-4', name: '🌍 INSTA - Seguidores Mundiais', price: '0.30' },
+      { id: 'insta-5', name: '☀️ INSTA - Serviços Orgânicos', price: '0.50' },
+      { id: 'insta-6', name: '👫 INSTA - Seguidores Genero', price: '0.45' },
+      { id: 'insta-7', name: '✅ INSTA - Seguidores Verificados', price: '0.60' },
+      { id: 'insta-8', name: '🎁 INSTA - PRESENTE GRÁTIS', price: '0.00' },
+      { id: 'insta-9', name: '💚 INSTA - Gostos Portugal', price: '0.25' },
+      { id: 'insta-10', name: '❤️ INSTA - Gostos Mundiais', price: '0.20' },
+      { id: 'insta-11', name: '✅ INSTA - Gostos Verificadas', price: '0.40' },
+      { id: 'insta-12', name: '👁️ INSTA - Visualização em Vídeo', price: '0.15' },
+      { id: 'insta-13', name: '🎬 INSTA - Serviços para Story', price: '0.30' },
+      { id: 'insta-14', name: '📊 INSTA - Votos em Enquete Story', price: '0.25' }
     ],
     youtube: [
       { id: 'ytb-1', name: '📝 YTB - Inscritos', price: '0.80' },
