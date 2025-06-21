@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,9 +6,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
-import BalanceTopUp from '@/components/BalanceTopUp';
+import StripePayment from '@/components/StripePayment';
+import PaymentSuccessHandler from '@/components/PaymentSuccessHandler';
 import OrderHistory from '@/components/OrderHistory';
-import OrderForm from '@/components/OrderForm';
+import RealOrderForm from '@/components/RealOrderForm';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -130,6 +132,8 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
+      <PaymentSuccessHandler />
+      
       {/* Sidebar */}
       <div className="w-64 bg-blue-600 text-white p-4">
         <div className="mb-8">
@@ -216,8 +220,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Order Form */}
-            <OrderForm categories={categories} services={services} />
+            {/* Real Order Form */}
+            <RealOrderForm categories={categories} services={services} />
 
             {/* Promotional Image */}
             <Card>
@@ -225,18 +229,19 @@ const Dashboard = () => {
                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-2">Precisa tornar sua presença online perceptível?</h3>
+                      <h3 className="text-lg font-semibold mb-2">Sistema Real de Redes Sociais</h3>
                       <p className="text-sm mb-4">
-                        Podemos ajudá-lo com isso! Você pode obter grande exposição online 
-                        usando os nossos serviços automatizados que oferecemos em nosso painel
+                        Nossa plataforma utiliza APIs reais e sistemas automatizados para entregar 
+                        resultados genuínos em suas redes sociais. Todos os pedidos são processados 
+                        em tempo real com acompanhamento completo.
                       </p>
                       <p className="text-sm font-medium">
-                        Basta fazer um pedido e tudo será feito para você, BOAS COMPRAS !
+                        Pagamentos seguros via Stripe • Entrega garantida • Suporte 24/7
                       </p>
                     </div>
                     <div className="ml-6">
                       <div className="w-32 h-24 bg-white/20 rounded-lg flex items-center justify-center">
-                        <span className="text-xs">Sistema Samuel Prado ✓</span>
+                        <span className="text-xs">Sistema Real ✓</span>
                       </div>
                     </div>
                   </div>
@@ -334,7 +339,7 @@ const Dashboard = () => {
           <DialogHeader>
             <DialogTitle>Adicionar Saldo</DialogTitle>
           </DialogHeader>
-          <BalanceTopUp onClose={() => setShowBalanceDialog(false)} />
+          <StripePayment onClose={() => setShowBalanceDialog(false)} />
         </DialogContent>
       </Dialog>
     </div>
