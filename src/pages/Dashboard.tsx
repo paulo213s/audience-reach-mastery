@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle } from 'lucide-react';
+import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle, Play, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import StripePayment from '@/components/StripePayment';
@@ -16,6 +15,7 @@ const Dashboard = () => {
   const { profile, loading } = useProfile();
   const [activeSection, setActiveSection] = useState('new-order');
   const [showBalanceDialog, setShowBalanceDialog] = useState(false);
+  const [showTutorialDialog, setShowTutorialDialog] = useState(false);
   
   const sidebarItems = [
     { icon: Plus, label: 'Fazer novo pedido', id: 'new-order' },
@@ -119,6 +119,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleTutorialClick = () => {
+    setShowTutorialDialog(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -204,7 +208,7 @@ const Dashboard = () => {
               <p className="text-gray-700 mb-4">Não sabes como usar a ferramenta?</p>
               <div className="space-y-2">
                 <Button 
-                  onClick={() => setActiveSection('tutorials')}
+                  onClick={handleTutorialClick}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2"
                 >
                   ASSISTIR AULAS PASSO A PASSO 🚀
@@ -268,14 +272,28 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-600 mb-4">
                     Aprenda o básico sobre como navegar e fazer pedidos em nossa plataforma.
                   </p>
-                  <Button variant="outline" size="sm">Ver Tutorial</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleTutorialClick}
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Ver Tutorial
+                  </Button>
                 </div>
                 <div className="border rounded-lg p-4">
                   <h3 className="font-medium mb-2">Gerenciando seu saldo</h3>
                   <p className="text-sm text-gray-600 mb-4">
                     Como adicionar saldo e acompanhar suas transações.
                   </p>
-                  <Button variant="outline" size="sm">Ver Tutorial</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleTutorialClick}
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Ver Tutorial
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -340,6 +358,88 @@ const Dashboard = () => {
             <DialogTitle>Adicionar Saldo</DialogTitle>
           </DialogHeader>
           <StripePayment onClose={() => setShowBalanceDialog(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Tutorial Dialog */}
+      <Dialog open={showTutorialDialog} onOpenChange={setShowTutorialDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Tutoriais Passo a Passo</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="border rounded-lg p-4">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-20 h-14 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <Play className="w-6 h-6 text-gray-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium mb-1">Como fazer seu primeiro pedido</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Tutorial completo sobre como usar nossa plataforma para fazer pedidos de redes sociais.
+                  </p>
+                  <div className="flex space-x-2">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      <Play className="w-4 h-4 mr-2" />
+                      Assistir Agora
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Abrir em Nova Aba
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border rounded-lg p-4">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-20 h-14 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <Play className="w-6 h-6 text-gray-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium mb-1">Gerenciando seu saldo</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Aprenda como adicionar saldo, acompanhar transações e gerenciar sua conta.
+                  </p>
+                  <div className="flex space-x-2">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      <Play className="w-4 h-4 mr-2" />
+                      Assistir Agora
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Abrir em Nova Aba
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border rounded-lg p-4">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-20 h-14 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <Play className="w-6 h-6 text-gray-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium mb-1">Estratégias de crescimento</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Dicas avançadas para maximizar seus resultados nas redes sociais.
+                  </p>
+                  <div className="flex space-x-2">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      <Play className="w-4 h-4 mr-2" />
+                      Assistir Agora
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Abrir em Nova Aba
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
