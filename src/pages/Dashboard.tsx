@@ -44,8 +44,9 @@ const Dashboard = () => {
   ];
 
   const categories = [
-    { value: 'promocional', label: '🔥 MEGA CATEGORIA PROMOCIONAL 🔥' },
-    { value: 'instagram', label: '📷 Instagram' },
+    { value: 'promocional', label: '⚡ MEGA CATEGORIA PROMOCIONAL ⚡' },
+    { value: 'instagram', label: '📷 INSTA - Mais Vendidos' },
+    { value: 'instagram-portugal', label: '🇵🇹 INSTA - Seguidores Portugal' },
     { value: 'youtube', label: '🎥 YouTube' },
     { value: 'facebook', label: '📘 Facebook' },
     { value: 'tiktok', label: '🎵 TikTok' },
@@ -56,21 +57,30 @@ const Dashboard = () => {
   ];
 
   const services = {
+    promocional: [
+      { id: '257', name: '🔥 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️', price: '0.30' },
+      { id: '240', name: '❤️ INSTA - GOSTOS MUNDIAIS (Promoção Relâmpago) ⚡ ❤️', price: '0.39' }
+    ],
     instagram: [
-      { id: 'insta-1', name: '📊 INSTA - Mais Vendidos', price: '0.25' },
-      { id: 'insta-2', name: '🇵🇹 INSTA - Seguidores Portugal', price: '0.40' },
-      { id: 'insta-3', name: '🇵🇹 INSTA - Seguidores Mistos', price: '0.35' },
-      { id: 'insta-4', name: '🌍 INSTA - Seguidores Mundiais', price: '0.30' },
-      { id: 'insta-5', name: '☀️ INSTA - Serviços Orgânicos', price: '0.50' },
-      { id: 'insta-6', name: '👫 INSTA - Seguidores Genero', price: '0.45' },
-      { id: 'insta-7', name: '✅ INSTA - Seguidores Verificados', price: '0.60' },
-      { id: 'insta-8', name: '🎁 INSTA - PRESENTE GRÁTIS', price: '0.00' },
-      { id: 'insta-9', name: '💚 INSTA - Gostos Portugal', price: '0.25' },
-      { id: 'insta-10', name: '❤️ INSTA - Gostos Mundiais', price: '0.20' },
-      { id: 'insta-11', name: '✅ INSTA - Gostos Verificadas', price: '0.40' },
-      { id: 'insta-12', name: '👁️ INSTA - Visualização em Vídeo', price: '0.15' },
-      { id: 'insta-13', name: '🎬 INSTA - Serviços para Story', price: '0.30' },
-      { id: 'insta-14', name: '📊 INSTA - Votos em Enquete Story', price: '0.25' }
+      { id: '2', name: '👥 INSTA - SEGUIDORES ❤️', price: '5.60' },
+      { id: '3', name: '❤️ INSTA - GOSTOS ❤️', price: '0.50' },
+      { id: '4', name: '👁️ INSTA - VISUALIZAÇÃO ❤️', price: '0.35' },
+      { id: '5', name: '👁️ INSTA - VISUALIZAÇÃO PORTUGAL PT', price: '0.45' }
+    ],
+    'instagram-portugal': [
+      { id: 'insta-pt-1', name: '🇵🇹 INSTA - Seguidores Portugal', price: '0.40' },
+      { id: 'insta-pt-2', name: '🇵🇹 INSTA - Seguidores Mistos', price: '0.35' },
+      { id: 'insta-pt-3', name: '🌍 INSTA - Seguidores Mundiais', price: '0.30' },
+      { id: 'insta-pt-4', name: '☀️ INSTA - Serviços Orgânicos', price: '0.50' },
+      { id: 'insta-pt-5', name: '👫 INSTA - Seguidores Genero', price: '0.45' },
+      { id: 'insta-pt-6', name: '✅ INSTA - Seguidores Verificados', price: '0.60' },
+      { id: 'insta-pt-7', name: '🎁 INSTA - PRESENTE GRÁTIS', price: '0.00' },
+      { id: 'insta-pt-8', name: '💚 INSTA - Gostos Portugal', price: '0.25' },
+      { id: 'insta-pt-9', name: '❤️ INSTA - Gostos Mundiais', price: '0.20' },
+      { id: 'insta-pt-10', name: '✅ INSTA - Gostos Verificadas', price: '0.40' },
+      { id: 'insta-pt-11', name: '👁️ INSTA - Visualização em Vídeo', price: '0.15' },
+      { id: 'insta-pt-12', name: '🎬 INSTA - Serviços para Story', price: '0.30' },
+      { id: 'insta-pt-13', name: '📊 INSTA - Votos em Enquete Story', price: '0.25' }
     ],
     youtube: [
       { id: 'ytb-1', name: '📝 YTB - Inscritos', price: '0.80' },
@@ -106,6 +116,11 @@ const Dashboard = () => {
       { id: 'tiktok-7', name: '💬 TIKTOK - Comentários', price: '0.45' },
       { id: 'tiktok-8', name: '✅ TIKTOK - Comentário Verificado', price: '0.70' }
     ],
+    twitter: [
+      { id: 'twitter-1', name: '👥 TWITTER - Seguidores', price: '0.55' },
+      { id: 'twitter-2', name: '👍 TWITTER - Likes', price: '0.30' },
+      { id: 'twitter-3', name: '🔄 TWITTER - Retweets', price: '0.40' }
+    ],
     twitch: [
       { id: 'twitch-1', name: '👥 TWITCH - Seguidores', price: '0.50' },
       { id: 'twitch-2', name: '🛠️ TWITCH - Serviços', price: '0.45' },
@@ -119,9 +134,6 @@ const Dashboard = () => {
       { id: 'kwai-1', name: '👥 KAWAI - Seguidores', price: '0.45' },
       { id: 'kwai-2', name: '👍 KAWAI - Gostos', price: '0.30' },
       { id: 'kwai-3', name: '👁️ KAWAI - Visualizações em Vídeo', price: '0.20' }
-    ],
-    promocional: [
-      { id: 'promo-1', name: '👑 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️', price: '0.30' }
     ]
   };
 
@@ -175,7 +187,7 @@ const Dashboard = () => {
       <PaymentSuccessHandler />
       
       {/* Sidebar */}
-      <div className="w-64 bg-blue-600 text-white p-4">
+      <div className="w-64 bg-blue-600 text-white p-4 flex flex-col">
         <div className="mb-8">
           <h1 className="text-xl font-bold">UPSECRETO.COM</h1>
           {profile && (
@@ -185,7 +197,7 @@ const Dashboard = () => {
           )}
         </div>
         
-        <nav className="space-y-2">
+        <nav className="space-y-2 flex-1">
           {sidebarItems.map((item, index) => (
             <button
               key={index}
