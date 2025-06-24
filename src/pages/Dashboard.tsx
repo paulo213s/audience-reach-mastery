@@ -2,20 +2,34 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle, Play, ExternalLink } from 'lucide-react';
+import { Plus, CreditCard, BookOpen, BarChart3, Headphones, RefreshCw, Package, Zap, MessageCircle, Play, ExternalLink, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
+import { useContacts } from '@/hooks/useContacts';
 import StripePayment from '@/components/StripePayment';
 import PaymentSuccessHandler from '@/components/PaymentSuccessHandler';
 import OrderHistory from '@/components/OrderHistory';
 import RealOrderForm from '@/components/RealOrderForm';
+import ContactDialog from '@/components/ContactDialog';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { profile, loading } = useProfile();
+  const {
+    whatsappContacts,
+    emailContacts,
+    loading: contactsLoading,
+    saveWhatsAppContact,
+    saveEmailContact,
+    openWhatsApp,
+    openEmail
+  } = useContacts();
+  
   const [activeSection, setActiveSection] = useState('new-order');
   const [showBalanceDialog, setShowBalanceDialog] = useState(false);
   const [showTutorialDialog, setShowTutorialDialog] = useState(false);
+  const [showContactDialog, setShowContactDialog] = useState(false);
+  const [contactType, setContactType] = useState<'whatsapp' | 'email'>('whatsapp');
   
   const sidebarItems = [
     { icon: Plus, label: 'Fazer novo pedido', id: 'new-order' },
@@ -123,6 +137,28 @@ const Dashboard = () => {
     setShowTutorialDialog(true);
   };
 
+  const handleWhatsAppClick = () => {
+    if (whatsappContacts.length > 0) {
+      openWhatsApp(whatsappContacts[0].phone_number);
+    } else {
+      setContactType('whatsapp');
+      setShowContactDialog(true);
+    }
+  };
+
+  const handleEmailClick = () => {
+    if (emailContacts.length > 0) {
+      openEmail(emailContacts[0].email);
+    } else {
+      setContactType('email');
+      setShowContactDialog(true);
+    }
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -163,6 +199,18 @@ const Dashboard = () => {
             </button>
           ))}
         </nav>
+
+        {/* Botão de Sair */}
+        <div className="mt-auto pt-8">
+          <Button
+            onClick={handleSignOut}
+            variant="outline"
+            className="w-full text-white border-white hover:bg-white hover:text-blue-600"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sair
+          </Button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -309,23 +357,65 @@ const Dashboard = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-4 p-4 border rounded-lg">
                   <MessageCircle className="w-6 h-6 text-green-600" />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-medium">WhatsApp</h3>
-                    <p className="text-sm text-gray-600">19 992430588</p>
+                    <p className="text-sm text-gray-600">
+                      {whatsappContacts.length > 0 
+                        ? whatsappContacts[0].phone_number 
+                        : 'Adicionar número do WhatsApp'
+                      }
+                    </p>
                   </div>
-                  <Button className="bg-green-600 hover:bg-green-700">
-                    Abrir Chat
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={handleWhatsAppClick}
+                    >
+                      {whatsappContacts.length > 0 ? 'Abrir Chat' : 'Adicionar'}
+                    </Button>
+                    {whatsappContacts.length > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={() => {
+                          setContactType('whatsapp');
+                          setShowContactDialog(true);
+                        }}
+                      >
+                        Editar
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 border rounded-lg">
                   <Package className="w-6 h-6 text-blue-600" />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-sm text-gray-600">contato@socialmaxpro.com</p>
+                    <p className="text-sm text-gray-600">
+                      {emailContacts.length > 0 
+                        ? emailContacts[0].email 
+                        : 'Adicionar endereço de email'
+                      }
+                    </p>
                   </div>
-                  <Button variant="outline">
-                    Enviar Email
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline"
+                      onClick={handleEmailClick}
+                    >
+                      {emailContacts.length > 0 ? 'Enviar Email' : 'Adicionar'}
+                    </Button>
+                    {emailContacts.length > 0 && (
+                      <Button 
+                        variant="outline"
+                        onClick={() => {
+                          setContactType('email');
+                          setShowContactDialog(true);
+                        }}
+                      >
+                        Editar
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -442,6 +532,15 @@ const Dashboard = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Contact Dialog */}
+      <ContactDialog
+        open={showContactDialog}
+        onOpenChange={setShowContactDialog}
+        type={contactType}
+        onSave={contactType === 'whatsapp' ? saveWhatsAppContact : saveEmailContact}
+        loading={contactsLoading}
+      />
     </div>
   );
 };
