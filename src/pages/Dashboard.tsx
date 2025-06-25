@@ -58,14 +58,56 @@ const Dashboard = () => {
 
   const services = {
     promocional: [
-      { id: '257', name: '🔥 INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️', price: '0.30' },
-      { id: '240', name: '❤️ INSTA - GOSTOS MUNDIAIS (Promoção Relâmpago) ⚡ ❤️', price: '0.39' }
+      { 
+        id: '257', 
+        name: '👁️ INSTA - VISUALIZAÇÃO PORTUGAL PT (Promoção Relâmpago) ⚡ ❤️', 
+        price: '0.30',
+        minOrder: 100,
+        maxOrder: 100000000,
+        description: 'Visualizações portuguesas para Instagram'
+      },
+      { 
+        id: '240', 
+        name: '❤️ INSTA - GOSTOS MUNDIAIS (Promoção Relâmpago) ⚡ ❤️', 
+        price: '0.39',
+        minOrder: 10,
+        maxOrder: 5000000,
+        description: 'Gostos mundiais para Instagram'
+      }
     ],
     instagram: [
-      { id: '2', name: '👥 INSTA - SEGUIDORES ❤️', price: '5.60' },
-      { id: '3', name: '❤️ INSTA - GOSTOS ❤️', price: '0.50' },
-      { id: '4', name: '👁️ INSTA - VISUALIZAÇÃO ❤️', price: '0.35' },
-      { id: '5', name: '👁️ INSTA - VISUALIZAÇÃO PORTUGAL PT', price: '0.45' }
+      { 
+        id: '2', 
+        name: '👥 INSTA - SEGUIDORES ❤️', 
+        price: '5.60',
+        minOrder: 10,
+        maxOrder: 5000000,
+        description: 'Seguidores para Instagram'
+      },
+      { 
+        id: '3', 
+        name: '❤️ INSTA - GOSTOS ❤️', 
+        price: '0.50',
+        minOrder: 10,
+        maxOrder: 5000000,
+        description: 'Gostos para Instagram'
+      },
+      { 
+        id: '4', 
+        name: '👁️ INSTA - VISUALIZAÇÃO ❤️', 
+        price: '0.35',
+        minOrder: 100,
+        maxOrder: 100000000,
+        description: 'Visualizações para Instagram'
+      },
+      { 
+        id: '5', 
+        name: '👁️ INSTA - VISUALIZAÇÃO PORTUGAL PT', 
+        price: '0.45',
+        minOrder: 100,
+        maxOrder: 100000000,
+        description: 'Visualizações portuguesas para Instagram'
+      }
     ],
     'instagram-portugal': [
       { id: 'insta-pt-1', name: '🇵🇹 INSTA - Seguidores Portugal', price: '0.40' },

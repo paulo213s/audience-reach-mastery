@@ -29,7 +29,7 @@ export const useContacts = () => {
     setLoading(true);
     try {
       const { error } = await supabase
-        .from('whatsapp_contacts' as any)
+        .from('whatsapp_contacts')
         .insert({
           user_id: user.id,
           phone_number: phoneNumber
@@ -60,7 +60,7 @@ export const useContacts = () => {
     setLoading(true);
     try {
       const { error } = await supabase
-        .from('email_contacts' as any)
+        .from('email_contacts')
         .insert({
           user_id: user.id,
           email: email
@@ -90,7 +90,7 @@ export const useContacts = () => {
 
     try {
       const { data, error } = await supabase
-        .from('whatsapp_contacts' as any)
+        .from('whatsapp_contacts')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
@@ -107,7 +107,7 @@ export const useContacts = () => {
 
     try {
       const { data, error } = await supabase
-        .from('email_contacts' as any)
+        .from('email_contacts')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
