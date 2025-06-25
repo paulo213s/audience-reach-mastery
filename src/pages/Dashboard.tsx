@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,6 +14,7 @@ import SupportSection from '@/components/dashboard/SupportSection';
 import TutorialsSection from '@/components/dashboard/TutorialsSection';
 import TutorialDialog from '@/components/dashboard/TutorialDialog';
 import GenericSection from '@/components/dashboard/GenericSection';
+import ApiSection from '@/components/dashboard/ApiSection';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
@@ -104,7 +104,7 @@ const Dashboard = () => {
       case 'services':
         return <GenericSection title="Serviços" />;
       case 'api':
-        return <GenericSection title="API" />;
+        return <ApiSection />;
       case 'mass-order':
         return <GenericSection title="Pedidos em Massa" />;
       default:
