@@ -28,7 +28,7 @@ export const useContacts = () => {
     
     setLoading(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('whatsapp_contacts')
         .insert({
           user_id: user.id,
@@ -59,7 +59,7 @@ export const useContacts = () => {
     
     setLoading(true);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('email_contacts')
         .insert({
           user_id: user.id,
@@ -89,7 +89,7 @@ export const useContacts = () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('whatsapp_contacts')
         .select('*')
         .eq('user_id', user.id)
@@ -106,7 +106,7 @@ export const useContacts = () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('email_contacts')
         .select('*')
         .eq('user_id', user.id)
